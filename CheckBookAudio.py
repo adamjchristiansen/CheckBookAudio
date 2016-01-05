@@ -56,6 +56,8 @@ def ParseArguments():
     return sheetNamesToParse
 
 def CompareAudioAndText(sheetName):
+    print "Comparing the text to the audio we have"
+
     #check if we're already using that sheet name
     #this is the case if they want to parse multiple columns in the same LUT
     i = 0
@@ -140,6 +142,8 @@ def Normalize(word):
         return word
 
 def ParseBookText(sheetName, startRow, startCol):
+    print "Parsing the text"
+
     # xlrd examples for parsing Excel sheets:
     # 
     # print "The number of worksheets is", book.nsheets
@@ -182,6 +186,7 @@ def ParseBookText(sheetName, startRow, startCol):
             break
 
 def LoadAudiosWeHave():
+    print "Collecting existing audios"
     narratorName = ""
 
     for (dirpath, dirnames, filenames) in walk(pathToAudioWeHave):
@@ -199,6 +204,8 @@ def LoadAudiosWeHave():
         return narratorName
 
 def ParseStartLocationFromSheetName(sheetName):
+    print "Parsing sheet name and starting location"
+
     coord = sheetName.split()[-1] # "B14" is the last item in space seperated list
     sheetName = " ".join(sheetName.split()[:-1]) #recombining sheet name without coordinate
     asciiValForCapitalA = 65
@@ -208,6 +215,8 @@ def ParseStartLocationFromSheetName(sheetName):
     return sheetName, startRow, startCol
 
 if __name__ == "__main__":
+    print "In main"
+
     pathToBookText = "" #"C:/Users/adam.christiansen.IMAGINELEARNING/Downloads/Start Reading English - All 3 Modes (decodables) LUT.xlsx"
     pathToAudioWeHave = "" #"O:/Projects/IL - Activities/[Shared Media]/Level 2/Shared Word Rec and Reading/Audio/Narration/English - Alex"
     pathToOutputFile = "" #"C:/Users/adam.christiansen.IMAGINELEARNING/Desktop/"#CheckBookAudioOut.txt"
