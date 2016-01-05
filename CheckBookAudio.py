@@ -118,14 +118,12 @@ def CompareAudioAndText(sheetName):
 
 def GetCellValue(sheet, row, col):
     cellType = sheet.cell_type(row, col)
-    print "cellType: ", cellType
 
     if cellType == 2:                               #"XL_CELL_NUMBER": float
-        print "cell value: ", sheet.cell_value(row, col)
+        #if having problems with decimal words, I'm casting to int here
         return str(int(sheet.cell_value(row, col)))
     elif cellType == 4:                             #"XL_CELL_BOOLEAN": int 1 = true, 0 = false
         value = sheet.cell_value(row, col)
-        print "value: ", value
         if value == 1:
             return "true"
         else:
@@ -162,11 +160,8 @@ def ParseBookText(sheetName, startRow, startCol):
 
     while(pageText != ""):
         pageText = ''.join(char.lower() for char in pageText if char not in exclude)
-        # print "pageText: ", pageText
 
         for word in pageText.split():
-            # replaceWord = unicodedata.normalize('NFKD', word).encode('ascii', 'replace') #replaces the unicode chars with ?
-            # replaceWord = word
             replaceWord = Normalize(word)
 
             if u'\u2019' in word: #checks for unicode char for "'"
@@ -195,15 +190,13 @@ def LoadAudiosWeHave():
                 if narratorName == "":
                     #is the narrator name first or second? "Alex_dad" or "dad_Alex"
                     narratorName = filenames[i].split('_')[-1]
-                # key = "_".join(filenames[i].split('_')[1:]) #split on '_' to remove 'Alex' then join the rest (narrator name first)
+                # key = "_".join(filenames[i].split('_')[1:]) #split on '_' to remove 'Alex' then join the rest (when narrator name is first)
                 key = "_".join(filenames[i].split('_')[:-1]) #get all but the last piece for when narrator name is last
-                # key = key[:-4] #remove .wav or .wma
+                # key = key[:-4] #remove .wav or .wma       # don't need to chop this when narrator name is last
                 key = ''.join(char.lower() for char in key)
                 value = filenames[i][:-4]
                 wordToAudioName[key] = value
-        print "wordToAudioName: ", wordToAudioName
         return narratorName
-        #break
 
 def ParseStartLocationFromSheetName(sheetName):
     coord = sheetName.split()[-1] # "B14" is the last item in space seperated list
@@ -211,10 +204,6 @@ def ParseStartLocationFromSheetName(sheetName):
     asciiValForCapitalA = 65
     startCol = ord(coord[0]) - asciiValForCapitalA #ascii val of letter they pass in minus val of A
     startRow = int(coord[1:])-1
-
-    print "sheetName: " + sheetName
-    print "startRow: " + str(startRow)
-    print "startCol: " + str(startCol)
 
     return sheetName, startRow, startCol
 
